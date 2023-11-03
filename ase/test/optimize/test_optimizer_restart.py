@@ -85,10 +85,11 @@ def fragile_optimizer(opt, trajectory, restart, run_kwargs, opt_params):
     return fragile_init, fragile_restart
 
 
-@pytest.mark.parametrize("opt", [BFGS, CellAwareBFGS,
-    pytest.param(BFGSLineSearch, marks=pytest.mark.xfail(reason=
-        'Restart is absolutely broken and does not work. orig_cell is not '
-        'stored in output'))])
+@pytest.mark.parametrize(
+    "opt", [BFGS, CellAwareBFGS, pytest.param(
+        BFGSLineSearch, marks=pytest.mark.xfail(
+            reason='Restart is absolutely broken and does not work. orig_cell '
+                   'is not stored in output'))])
 def test_optimizers_restart(testdir, opt):
     restart_filename = f"restart_{opt.__name__}.dat"
     trajectory_filename = f"{opt.__name__}.traj"
