@@ -142,7 +142,15 @@ Calculators:
 
 * Added an ``energies`` property to the ``lammpslib`` calculator (:mr:`2799`)
 
-* Fix ``lsubsrot`` typo in VASP calculator to ``lsubrot`` (:mr:`2762`)
+* :func:`ase.calculator.lammpslib.is_upper_triangular` is deprecated. Use the
+  method outlined in
+  `this StackOverflow post <https://stackoverflow.com/a/26912166>`_ (:mr:`3102`)
+
+* :func:`ase.calculator.lammpslib.convert_cell` is deprecated. Please use
+  :func:`ase.calculators.lammps.coordinatetransform.calc_rotated_cell` instead.
+  (:mr:`3102`)
+
+* Fix `lsubsrot` typo in VASP calculator to `lsubrot` (:mr:`2762`)
 
 * Fix atomic polarizability for boron in
   :class:`ase.calculators.bond_polarizability.LippincottStuttman` (:mr:`2759`)
@@ -210,6 +218,9 @@ Algorithms:
   convergence status *after* logging and dumping for the corresponding step
   (:issue:`1339`; :mr:`3072`)
 
+* :class:`ExpCellFilter` is deprecated. Use :class:`FrechetCellFilter` instead.
+  (:mr:`2981`)
+
 Optimizers:
 
 * Add :class:`ase.optimize.climbfixinternals.BFGSClimbFixInternals` class for
@@ -217,7 +228,7 @@ Optimizers:
   (:mr:`2299`)
 
 * :func:`ase.optimize.optimize.Optimizers.irun` and
-  :func:`ase.optimize.optimize.Optimizers.run` now respect `steps=0` (:issue:`1183`; 
+  :func:`ase.optimize.optimize.Optimizers.run` now respect ``steps=0`` (:issue:`1183`; 
   :issue:`1258`; :mr:`2922`).
 
 * Added the ``.trajectory`` attribute to :class:`ase.optimize.optimize.Dynamics` 
@@ -605,7 +616,7 @@ Calculators:
   :class:`ase.calculators.socketio.SocketIOCalculator`.
 
 * :class:`~ase.calculators.vasp.Vasp` now uses the newer implementation
-  formerly known as Vasp2.
+  formerly known as Vasp2. Vasp2 is deprecated.
 
 * Added smooth cutoff option to :class:`ase.calculators.lj.LennardJones`.
   This makes the forces continuous as atoms move past the cutoff radius.
