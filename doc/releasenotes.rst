@@ -294,6 +294,9 @@ I/O:
 * Add numerical stress skips for SCF re-initialization in
   :class:`ase.io.aims.AimsOutCalcChunk`.
 
+* Deprecated calling :func:`ase.io.aims.write_aims` with ``velocities``. Use
+  ``write_velocities`` instead (:mr:`2910`).
+
 * Fix ``ValueError`` that was raised when using quaternions with
   :func:`ase.io.lammpsrun.lammps_data_to_ase_atoms`.
 
@@ -687,6 +690,9 @@ Version 3.19.3
 
  * Minor fix related to package version requirements on pypi.
 
+ * Deprecated calling the :class:`ase.optimize.fire.FIRE` constructor
+   with ``maxmove``; please use ``maxstep`` (:mr:`1725`).
+
 Version 3.20.0
 ==============
 
@@ -862,6 +868,9 @@ Version 3.19.2
   Update png writer to be compatible with matplotlib 3.3.0.
   Update incompatible calls to ``matplotlib.use()``.
 
+* Deprecated calling :class:`ase.calculators.vasp.vasp2.Vasp2` constructor
+  with directory in ``label`` parameter (:mr:`1940`)
+
 Version 3.19.1
 ==============
 
@@ -998,6 +1007,8 @@ Version 3.18.2
 * Fix an issue with the binary package (wheel) of 3.18.1.
   No bugfixes as such.
 
+* Deprecated ``ase.calculator.siesta.base_siesta``
+
 
 Version 3.18.1
 ==============
@@ -1010,6 +1021,8 @@ Version 3.18.1
   Use ``atoms.pbc`` instead; this works the same as always.
   Also, the :class:`~ase.cell.Cell` object now exposes almost the entire
   ``ndarray`` interface.  For a list of smaller bugfixes, see the git log.
+
+* Deprecate ``ase.Atoms.get_number_of_atoms`` (:mr:`1295`)
 
 
 Version 3.18.0
