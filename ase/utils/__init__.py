@@ -211,6 +211,9 @@ def convert_string_to_fd(name, world=None):
 
     Will open a file for writing with given name.  Use None for no output and
     '-' for sys.stdout.
+
+    .. deprecated:: 3.22.1
+        Please use e.g. ase.utils.IOContext class instead.
     """
     if world is None:
         from ase.parallel import world
