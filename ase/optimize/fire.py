@@ -1,13 +1,41 @@
 import warnings
-from typing import IO, Callable, Optional, Union
+from typing import IO, Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
 
 from ase import Atoms
 from ase.optimize.optimize import Optimizer
+from ase.utils import deprecated
+
+
+def _forbid_maxmove(args: List, kwargs: Dict[str, Any]) -> bool:
+    if len(args) >= 8 and args[6] is None and args[7] is not None:
+        return True
+
+    maxstep = args[6] if len(args) >= 7 else kwargs.get("maxstep", None)
+
+    return (
+        maxstep is None
+        and kwargs.get("maxmove", None) is not None
+    )
+
+
+def _maxstep_alias_handler(args: List, kwargs: Dict[str, Any]):
+    if len(args) >= 8:
+        args[6] = args[7]
+    elif len(args) == 7:
+        args[6] = kwargs["maxmove"]
+    else:
+        kwargs["maxstep"] = kwargs["maxmove"]
 
 
 class FIRE(Optimizer):
+    @deprecated(
+        "Use of `maxmove` is deprecated. Use `maxstep` instead.",
+        category=np.VisibleDeprecationWarning,
+        condition=_forbid_maxmove,
+        handler=_maxstep_alias_handler,
+    )
     def __init__(
         self,
         atoms: Atoms,
@@ -63,6 +91,8 @@ class FIRE(Optimizer):
             *r* that the optimizer will revert to, current energy *e* and
             energy of last step *e_last*. This is only called if e > e_last.
 
+        .. deprecated:: 3.19.3
+            Use of ``maxmove`` is deprecated; please use ``maxstep``.
         """
         Optimizer.__init__(self, atoms, restart, logfile, trajectory,
                            master, force_consistent=force_consistent)
@@ -73,12 +103,8 @@ class FIRE(Optimizer):
 
         if maxstep is not None:
             self.maxstep = maxstep
-        elif maxmove is not None:
-            self.maxstep = maxmove
-            warnings.warn('maxmove is deprecated; please use maxstep',
-                          np.VisibleDeprecationWarning)
         else:
-            self.maxstep = self.defaults['maxstep']
+            self.maxstep = self.defaults["maxstep"]
 
         self.dtmax = dtmax
         self.Nmin = Nmin

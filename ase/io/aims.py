@@ -4,7 +4,7 @@ import re
 import time
 import warnings
 from pathlib import Path
-from typing import Union
+from typing import Any, Dict, List, Union
 
 import numpy as np
 
@@ -15,7 +15,7 @@ from ase.constraints import FixAtoms, FixCartesian
 from ase.data import atomic_numbers
 from ase.io import ParseError
 from ase.units import Ang, fs
-from ase.utils import lazymethod, lazyproperty, reader, writer
+from ase.utils import deprecated, lazymethod, lazyproperty, reader, writer
 
 v_unit = Ang / (1000.0 * fs)
 
@@ -218,7 +218,26 @@ def get_aims_header():
     return lines
 
 
+def _forbid_velocities_condition(args: List, kwargs: Dict[str, Any]) -> bool:
+    if len(args) >= 6 and args[5]:
+        return True
+    return kwargs.get("velocities", False)
+
+
+def _velocities_alias_handler(args: List, kwargs: Dict[str, Any]):
+    if len(args) >= 5:
+        args[4] = True
+    else:
+        kwargs["write_velocities"] = True
+
+
 # Write aims geometry files
+@deprecated(
+    "Use of `velocities` is deprecated, please use `write_velocities`",
+    category=np.VisibleDeprecationWarning,
+    condition=_forbid_velocities_condition,
+    handler=_velocities_alias_handler,
+)
 @writer
 def write_aims(
     fd,
@@ -257,6 +276,9 @@ def write_aims(
             A string to be added to the header of the file
         wrap: bool
             Wrap atom positions to cell before writing
+
+    .. deprecated:: 3.23.0
+        Use of ``velocities`` is deprecated, please use ``write_velocities``.
     """
 
     from ase.constraints import FixAtoms, FixCartesian
@@ -345,14 +367,6 @@ def write_aims(
             fd.write("    initial_charge %16.6f\n" % atom.charge)
         if atom.magmom:
             fd.write("    initial_moment %16.6f\n" % atom.magmom)
-
-        # Write the velocities if this is wanted
-        if velocities:
-            warnings.warn(
-                '`velocities` is deprecated, please use `write_velocities`',
-                np.VisibleDeprecationWarning
-            )
-            write_velocities = True
 
         if write_velocities and atoms.get_velocities() is not None:
             fd.write(

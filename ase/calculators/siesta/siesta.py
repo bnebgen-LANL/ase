@@ -14,8 +14,10 @@ import os
 import re
 import shutil
 import tempfile
+from typing import Any, Dict, List
 import warnings
 from os.path import isfile, islink, join
+from matplotlib.pyplot import get
 
 import numpy as np
 
@@ -30,6 +32,7 @@ from ase.calculators.siesta.parameters import (PAOBasisBlock, Species,
 from ase.data import atomic_numbers
 from ase.io.siesta import read_siesta_xv
 from ase.units import Bohr, Ry, eV
+from ase.utils import deprecated
 
 meV = 0.001 * eV
 
@@ -183,6 +186,44 @@ class SiestaParameters(Parameters):
         Parameters.__init__(self, **kwargs)
 
 
+_deprecated_siesta_command_message = (
+        'Please use $ASE_SIESTA_COMMAND and not '
+        '$SIESTA_COMMAND, which will be ignored '
+        'in the future. The new command format will not '
+        'work with the "<%s > %s" specification.  Use '
+        'instead e.g. "ASE_SIESTA_COMMAND=siesta'
+        ' < PREFIX.fdf > PREFIX.out", where PREFIX will '
+        'automatically be replaced by calculator label.'
+    )
+
+
+def _use_deprecated_siesta_command_handler(args: List, _: Dict[str, Any]):
+    self: Siesta = args[0]
+    commandvar = self.cfg.get("SIESTA_COMMAND")
+    runfile = self.prefix + ".fdf"
+    outfile = self.prefix + ".out"
+    try:
+        self.command = commandvar % (runfile, outfile)
+    except TypeError as err:
+        msg = (
+            "The 'SIESTA_COMMAND' environment must be a format string with "
+            "two string arguments.\nExample : 'siesta < %s > %s'.\n"
+            f"Got '{commandvar}'"
+        )
+        raise ValueError(msg) from err
+
+
+def _prohibit_unpolarized_keyword_condition(
+    _: List, kwargs: Dict[str, Any]
+) -> bool:
+    return "spin" in kwargs and kwargs["spin"] == "UNPOLARIZED"
+
+
+def _update_spin_keyword_handler(_: List, kwargs: Dict[str, Any]):
+    if kwargs["spin"] == "UNPOLARIZED":
+        kwargs["spin"] = "non-polarized"
+
+
 class Siesta(FileIOCalculator):
     """Calculator interface to the SIESTA code.
     """
@@ -223,8 +264,15 @@ class Siesta(FileIOCalculator):
     # it to use the bandpath keyword.
     accepts_bandpath_keyword = True
 
+    # ! Maybe can't use handler because configuration must be initialized first
+    @deprecated(
+        _deprecated_siesta_command_message,
+        category=np.VisibleDeprecationWarning,
+        condition=lambda args, _: args[0].cfg.get("SIESTA_COMMAND") is not None,
+        handler=_use_deprecated_siesta_command_handler
+    )
     def __init__(self, command=None, **kwargs):
-        """ASE interface to the SIESTA code.
+        f"""ASE interface to the SIESTA code.
 
         Parameters:
            - label        : The basename of all files created during
@@ -278,6 +326,8 @@ class Siesta(FileIOCalculator):
                             block Zmatrix allows to specify basic geometry
                             constrains such as realized through the ASE classes
                             FixAtom, FixedLine and FixedPlane.
+        .. deprecated:: 3.18.2
+            {_deprecated_siesta_command_message}
         """
 
         # Put in the default arguments.
@@ -288,29 +338,6 @@ class Siesta(FileIOCalculator):
             self,
             command=command,
             **parameters)
-
-        # For compatibility with old variable name:
-        commandvar = self.cfg.get('SIESTA_COMMAND')
-        if commandvar is not None:
-            warnings.warn('Please use $ASE_SIESTA_COMMAND and not '
-                          '$SIESTA_COMMAND, which will be ignored '
-                          'in the future.  The new command format will not '
-                          'work with the "<%s > %s" specification.  Use '
-                          'instead e.g. "ASE_SIESTA_COMMAND=siesta'
-                          ' < PREFIX.fdf > PREFIX.out", where PREFIX will '
-                          'automatically be replaced by calculator label',
-                          np.VisibleDeprecationWarning)
-            runfile = self.prefix + '.fdf'
-            outfile = self.prefix + '.out'
-            try:
-                self.command = commandvar % (runfile, outfile)
-            except TypeError:
-                raise ValueError(
-                    "The 'SIESTA_COMMAND' environment must " +
-                    "be a format string" +
-                    " with two string arguments.\n" +
-                    "Example : 'siesta < %s > %s'.\n" +
-                    f"Got '{commandvar}'")
 
     def __getitem__(self, key):
         """Convenience method to retrieve a parameter as
@@ -367,12 +394,23 @@ class Siesta(FileIOCalculator):
 
         return all_species, species_numbers
 
+    @deprecated(
+        "The keyword 'UNPOLARIZED' has been deprecated,"
+        "and replaced by 'non-polarized'",
+        category=np.VisibleDeprecationWarning,
+        condition=_prohibit_unpolarized_keyword_condition,
+        handler=_update_spin_keyword_handler,
+    )
     def set(self, **kwargs):
         """Set all parameters.
 
             Parameters:
                 -kwargs  : Dictionary containing the keywords defined in
                            SiestaParameters.
+
+        .. deprecated:: 3.18.2
+            The keyword 'UNPOLARIZED' has been deprecated and replaced by
+            'non-polarized'
         """
 
         # XXX Inserted these next few lines because set() would otherwise
@@ -414,12 +452,6 @@ class Siesta(FileIOCalculator):
 
         # Check the spin input.
         if 'spin' in kwargs:
-            if kwargs['spin'] == 'UNPOLARIZED':
-                warnings.warn("The keyword 'UNPOLARIZED' is deprecated,"
-                              "and replaced by 'non-polarized'",
-                              np.VisibleDeprecationWarning)
-                kwargs['spin'] = 'non-polarized'
-
             spin = kwargs['spin']
             if spin is not None and (spin.lower() not in self.allowed_spins):
                 mess = f"Spin must be {self.allowed_spins}, got '{spin}'"
@@ -1263,12 +1295,21 @@ class Siesta(FileIOCalculator):
 
 
 class Siesta3_2(Siesta):
+    @deprecated(
+        "The Siesta3_2 calculator class will no longer be supported. "
+        "Use 'ase.calculators.siesta.Siesta instead. "
+        "If using the ASE interface with SIESTA 3.2 you must explicitly "
+        "include the keywords 'SpinPolarized', 'NonCollinearSpin' and "
+        "'SpinOrbit' if needed.",
+        np.VisibleDeprecationWarning
+    )
     def __init__(self, *args, **kwargs):
-        warnings.warn(
-            "The Siesta3_2 calculator class will no longer be supported. "
-            "Use 'ase.calculators.siesta.Siesta in stead. "
-            "If using the ASE interface with SIESTA 3.2 you must explicitly "
-            "include the keywords 'SpinPolarized', 'NonCollinearSpin' and "
-            "'SpinOrbit' if needed.",
-            np.VisibleDeprecationWarning)
+        """
+        .. deprecated: 3.18.2
+            The Siesta3_2 calculator class will no longer be supported.
+            Use :class:`ase.calculators.siesta.Siesta` instead.
+            If using the ASE interface with SIESTA 3.2 you must explicitly
+            include the keywords 'SpinPolarized', 'NonCollinearSpin' and
+            'SpinOrbit' if needed.
+        """
         Siesta.__init__(self, *args, **kwargs)
