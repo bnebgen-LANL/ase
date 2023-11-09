@@ -186,7 +186,7 @@ class SiestaParameters(Parameters):
         Parameters.__init__(self, **kwargs)
 
 
-_deprecated_siesta_command_message = (
+_DEPRECATED_SIESTA_COMMAND_MESSAGE = (
         'Please use $ASE_SIESTA_COMMAND and not '
         '$SIESTA_COMMAND, which will be ignored '
         'in the future. The new command format will not '
@@ -198,19 +198,7 @@ _deprecated_siesta_command_message = (
 
 
 def _use_deprecated_siesta_command_handler(args: List, _: Dict[str, Any]):
-    self: Siesta = args[0]
-    commandvar = self.cfg.get("SIESTA_COMMAND")
-    runfile = self.prefix + ".fdf"
-    outfile = self.prefix + ".out"
-    try:
-        self.command = commandvar % (runfile, outfile)
-    except TypeError as err:
-        msg = (
-            "The 'SIESTA_COMMAND' environment must be a format string with "
-            "two string arguments.\nExample : 'siesta < %s > %s'.\n"
-            f"Got '{commandvar}'"
-        )
-        raise ValueError(msg) from err
+    
 
 
 def _prohibit_unpolarized_keyword_condition(
@@ -264,13 +252,6 @@ class Siesta(FileIOCalculator):
     # it to use the bandpath keyword.
     accepts_bandpath_keyword = True
 
-    # ! Maybe can't use handler because configuration must be initialized first
-    @deprecated(
-        _deprecated_siesta_command_message,
-        category=np.VisibleDeprecationWarning,
-        condition=lambda args, _: args[0].cfg.get("SIESTA_COMMAND") is not None,
-        handler=_use_deprecated_siesta_command_handler
-    )
     def __init__(self, command=None, **kwargs):
         f"""ASE interface to the SIESTA code.
 
@@ -327,7 +308,7 @@ class Siesta(FileIOCalculator):
                             constrains such as realized through the ASE classes
                             FixAtom, FixedLine and FixedPlane.
         .. deprecated:: 3.18.2
-            {_deprecated_siesta_command_message}
+            {_DEPRECATED_SIESTA_COMMAND_MESSAGE}
         """
 
         # Put in the default arguments.
@@ -338,6 +319,22 @@ class Siesta(FileIOCalculator):
             self,
             command=command,
             **parameters)
+
+        commandvar = self.cfg.get("SIESTA_COMMAND")
+        runfile = self.prefix + ".fdf"
+        outfile = self.prefix + ".out"
+        if commandvar is not None:
+            warnings.warn(_DEPRECATED_SIESTA_COMMAND_MESSAGE)
+            try:
+                self.command = commandvar % (runfile, outfile)
+            except TypeError as err:
+                msg = (
+                    "The 'SIESTA_COMMAND' environment must be a format string "
+                    "with two string arguments.\n"
+                    "Example : 'siesta < %s > %s'.\n"
+                    f"Got '{commandvar}'"
+                )
+                raise ValueError(msg) from err
 
     def __getitem__(self, key):
         """Convenience method to retrieve a parameter as
