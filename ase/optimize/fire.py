@@ -1,4 +1,3 @@
-import warnings
 from typing import IO, Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
@@ -9,32 +8,35 @@ from ase.utils import deprecated
 
 
 def _forbid_maxmove(args: List, kwargs: Dict[str, Any]) -> bool:
-    if len(args) >= 8 and args[6] is None and args[7] is not None:
-        return True
+    """Set maxstep with maxmove if not set."""
+    if len(args) >= 8 and args[7] is not None:
+        value = args[7]
+        args[7] = None
 
-    maxstep = args[6] if len(args) >= 7 else kwargs.get("maxstep", None)
+        if args[6] is None:
+            args[6] = value
+            return True
 
-    return (
-        maxstep is None
-        and kwargs.get("maxmove", None) is not None
-    )
+    if kwargs.get("maxmove", None) is not None:
+        value = kwargs["maxmove"]
+        del kwargs["maxmove"]
 
+        if len(args) == 7 and args[6] is None:
+            args[6] = value
+            return True
 
-def _maxstep_alias_handler(args: List, kwargs: Dict[str, Any]):
-    if len(args) >= 8:
-        args[6] = args[7]
-    elif len(args) == 7:
-        args[6] = kwargs["maxmove"]
-    else:
-        kwargs["maxstep"] = kwargs["maxmove"]
+        if "maxstep" in kwargs and kwargs.get("maxstep", None) is None:
+            kwargs["maxstep"] = value
+            return True
+
+    return False
 
 
 class FIRE(Optimizer):
     @deprecated(
         "Use of `maxmove` is deprecated. Use `maxstep` instead.",
-        category=np.VisibleDeprecationWarning,
-        condition=_forbid_maxmove,
-        handler=_maxstep_alias_handler,
+        category=FutureWarning,
+        callback=_forbid_maxmove,
     )
     def __init__(
         self,

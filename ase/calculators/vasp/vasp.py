@@ -37,7 +37,7 @@ from ase.calculators.singlepoint import SinglePointDFTCalculator
 from ase.calculators.vasp.create_input import GenerateVaspInput
 from ase.config import cfg
 from ase.io import jsonio, read
-from ase.utils import deprecated, PurePath
+from ase.utils import PurePath, deprecated
 from ase.vibrations.data import VibrationsData
 
 
@@ -110,7 +110,7 @@ class Vasp(GenerateVaspInput, Calculator):  # type: ignore[misc]
         'Specifying directory in "label" is deprecated, '
         'use "directory" instead.',
         category=np.VisibleDeprecationWarning,
-        condition=_prohibit_directory_in_label,
+        callback=_prohibit_directory_in_label,
     )
     def __init__(self,
                  atoms=None,

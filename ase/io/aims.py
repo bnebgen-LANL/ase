@@ -1,4 +1,5 @@
 """Defines class/functions to write input and parse output for FHI-aims."""
+import inspect
 import os
 import re
 import time
@@ -218,25 +219,21 @@ def get_aims_header():
     return lines
 
 
-def _forbid_velocities_condition(args: List, kwargs: Dict[str, Any]) -> bool:
-    if len(args) >= 6 and args[5]:
-        return True
-    return kwargs.get("velocities", False)
-
-
-def _velocities_alias_handler(args: List, kwargs: Dict[str, Any]):
-    if len(args) >= 5:
-        args[4] = True
-    else:
+def _write_velocities_alias(args: List, kwargs: Dict[str, Any]) -> bool:
+    if len(args) > 6 and args[6]:
+        args[5] = True
+    elif kwargs.get("velocities", False):
         kwargs["write_velocities"] = True
+    else:
+        return False
+    return True
 
 
 # Write aims geometry files
 @deprecated(
     "Use of `velocities` is deprecated, please use `write_velocities`",
     category=np.VisibleDeprecationWarning,
-    condition=_forbid_velocities_condition,
-    handler=_velocities_alias_handler,
+    callback=_write_velocities_alias,
 )
 @writer
 def write_aims(

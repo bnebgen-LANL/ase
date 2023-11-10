@@ -187,8 +187,8 @@ class SiestaParameters(Parameters):
 
 
 _DEPRECATED_SIESTA_COMMAND_MESSAGE = (
-        'Please use $ASE_SIESTA_COMMAND and not '
-        '$SIESTA_COMMAND, which will be ignored '
+        'Please use ``$ASE_SIESTA_COMMAND`` and not '
+        '``$SIESTA_COMMAND``, which will be ignored '
         'in the future. The new command format will not '
         'work with the "<%s > %s" specification.  Use '
         'instead e.g. "ASE_SIESTA_COMMAND=siesta'
@@ -197,19 +197,11 @@ _DEPRECATED_SIESTA_COMMAND_MESSAGE = (
     )
 
 
-def _use_deprecated_siesta_command_handler(args: List, _: Dict[str, Any]):
-    
-
-
-def _prohibit_unpolarized_keyword_condition(
-    _: List, kwargs: Dict[str, Any]
-) -> bool:
-    return "spin" in kwargs and kwargs["spin"] == "UNPOLARIZED"
-
-
-def _update_spin_keyword_handler(_: List, kwargs: Dict[str, Any]):
-    if kwargs["spin"] == "UNPOLARIZED":
+def _nonpolarized_alias(_: List, kwargs: Dict[str, Any]) -> bool:
+    if kwargs.get("spin", None) == "UNPOLARIZED":
         kwargs["spin"] = "non-polarized"
+        return True
+    return False
 
 
 class Siesta(FileIOCalculator):
@@ -395,8 +387,7 @@ class Siesta(FileIOCalculator):
         "The keyword 'UNPOLARIZED' has been deprecated,"
         "and replaced by 'non-polarized'",
         category=np.VisibleDeprecationWarning,
-        condition=_prohibit_unpolarized_keyword_condition,
-        handler=_update_spin_keyword_handler,
+        callback=_nonpolarized_alias,
     )
     def set(self, **kwargs):
         """Set all parameters.
