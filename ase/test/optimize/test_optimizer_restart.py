@@ -63,7 +63,8 @@ def fragile_optimizer(opt, trajectory, restart, run_kwargs, opt_params):
             break
 
     else:
-        raise "Fragile Optimizer did not break. Check if nsteps is to large."
+        assert 0, ("Fragile Optimizer did not break. Check if nsteps is to "
+                   "large.")
 
     # pick up where we left off, assert we have written the files, and they
     # contain data. We check this here since these files are required in
@@ -138,26 +139,26 @@ def test_optimizers_restart(testdir, opt):
 def read_traj(file: str):
     data = []
 
-    traj = Trajectory(file, "r")
-    for idx, atoms in enumerate(traj):
+    with Trajectory(file, "r") as traj:
+        for idx, atoms in enumerate(traj):
 
-        pos = atoms.get_positions()
-        forces = atoms.calc.results["forces"]
-        stress = atoms.calc.results["stress"]
-        energy = atoms.calc.results["energy"]
+            pos = atoms.get_positions()
+            forces = atoms.calc.results["forces"]
+            stress = atoms.calc.results["stress"]
+            energy = atoms.calc.results["energy"]
 
-        fmax = sqrt((forces**2).sum(axis=1).max())
-        smax = abs(stress).max()
+            fmax = sqrt((forces**2).sum(axis=1).max())
+            smax = abs(stress).max()
 
-        tmp = {
-            "step": idx,
-            "energy": energy,
-            "position": pos,
-            "forces": forces,
-            "fmax": fmax,
-            "smax": smax,
-        }
-        data.append(tmp)
-    traj.close()
+            tmp = {
+                "step": idx,
+                "energy": energy,
+                "position": pos,
+                "forces": forces,
+                "fmax": fmax,
+                "smax": smax,
+            }
+            data.append(tmp)
+        traj.close()
 
     return data
