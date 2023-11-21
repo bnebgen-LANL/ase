@@ -11,7 +11,7 @@ class DimerControl(RealDimerControl):
     def __init__(self, *args, **kwargs):
         """
         .. deprecated:: 3.23.0
-            Please import DimerControl from ase.mep
+            Please import ``DimerControl`` from :mod:`ase.mep`
         """
         super().__init__(*args, **kwargs)
 
@@ -21,7 +21,7 @@ class MinModeAtoms(RealMinModeAtoms):
     def __init__(self, *args, **kwargs):
         """
         .. deprecated:: 3.23.0
-            Please import MinModeAtoms from ase.mep
+            Please import ``MinModeAtoms`` from :mod:`ase.mep`
         """
         super().__init__(*args, **kwargs)
 
@@ -31,6 +31,6 @@ class MinModeTranslate(RealMinModeTranslate):
     def __init__(self, *args, **kwargs):
         """
         .. deprecated:: 3.23.0
-            Please import MinModeTranslate from ase.mep
+            Please import ``MinModeTranslate`` from :mod:`ase.mep`
         """
         super().__init__(*args, **kwargs)

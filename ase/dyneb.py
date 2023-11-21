@@ -9,6 +9,6 @@ class DyNEB(RealDyNEB):
     def __init__(self, *args, **kwargs):
         """
         .. deprecated:: 3.23.0
-            Please import DyNEB from ase.mep
+            Please import ``DyNEB`` from :mod:`ase.mep`
         """
         super().__init__(*args, **kwargs)

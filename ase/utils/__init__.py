@@ -213,7 +213,7 @@ def convert_string_to_fd(name, world=None):
     '-' for sys.stdout.
 
     .. deprecated:: 3.22.1
-        Please use e.g. ase.utils.IOContext class instead.
+        Please use e.g. :class:`ase.utils.IOContext` class instead.
     """
     if world is None:
         from ase.parallel import world

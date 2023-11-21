@@ -391,7 +391,7 @@ class BaseNEB:
                          optimizer=MDMin, mic=False, steps=100):
         """
         .. deprecated:: 3.23.0
-            Please use NEB's interpolate(method='idpp') method
+            Please use ``NEB``'s ``interpolate(method='idpp')`` method
         """
         idpp_interpolate(self, traj=traj, log=log, fmax=fmax,
                          optimizer=optimizer, mic=mic, steps=steps)
@@ -1004,7 +1004,7 @@ class IDPP(Calculator):
 class SingleCalculatorNEB(NEB):
     """
     .. deprecated:: 3.23.0
-        Please use NEB(allow_shared_calculator=True) instead
+        Please use ``NEB(allow_shared_calculator=True)`` instead
     """
     def __init__(self, images, *args, **kwargs):
         kwargs["allow_shared_calculator"] = True
@@ -1113,7 +1113,7 @@ class NEBTools:
     def get_fit(self):
         """
         .. deprecated:: 3.23.0
-            Please use ase.utils.forcecurve.fit_images(images)
+            Please use ``ase.utils.forcecurve.fit_images(images)``
         """
         return fit_images(self.images)
 
@@ -1234,7 +1234,7 @@ class NEBtools(NEBTools):
     def __init__(self, images):
         """
         .. deprecated:: 3.23.0
-            Please use NEBTools.
+            Please use ``NEBTools``.
         """
         NEBTools.__init__(self, images)
 
@@ -1243,6 +1243,6 @@ class NEBtools(NEBTools):
 def plot_band_from_fit(s, E, Sfit, Efit, lines, ax=None):
     """
     .. deprecated:: 3.23.0
-        Please use NEBTools.plot_band_from_fit.
+        Please use ``NEBTools.plot_band_from_fit``.
     """
     NEBTools.plot_band_from_fit(s, E, Sfit, Efit, lines, ax=None)
