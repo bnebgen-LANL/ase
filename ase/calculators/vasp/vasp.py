@@ -109,7 +109,7 @@ class Vasp(GenerateVaspInput, Calculator):  # type: ignore[misc]
     @deprecated(
         'Specifying directory in "label" is deprecated, '
         'use "directory" instead.',
-        category=np.VisibleDeprecationWarning,
+        category=FutureWarning,
         callback=_prohibit_directory_in_label,
     )
     def __init__(self,
@@ -123,8 +123,8 @@ class Vasp(GenerateVaspInput, Calculator):  # type: ignore[misc]
                  **kwargs):
         """
         .. deprecated:: 3.19.2
-            Specifying directory in "label" is deprecated,
-            use "directory" instead.
+            Specifying directory in ``label`` is deprecated,
+            use ``directory`` instead.
         """
 
         self._atoms = None

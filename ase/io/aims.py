@@ -232,7 +232,7 @@ def _write_velocities_alias(args: List, kwargs: Dict[str, Any]) -> bool:
 # Write aims geometry files
 @deprecated(
     "Use of `velocities` is deprecated, please use `write_velocities`",
-    category=np.VisibleDeprecationWarning,
+    category=FutureWarning,
     callback=_write_velocities_alias,
 )
 @writer

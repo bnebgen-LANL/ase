@@ -11,7 +11,7 @@ class BaseSiesta(Siesta):
     @deprecated(
         "The BaseSiesta calculator class will no longer be supported. "
         "Use `ase.calculators.siesta.Siesta` instead.",
-        category=np.VisibleDeprecationWarning,
+        category=FutureWarning,
     )
     def __init__(self, *args, **kwargs):
         """

@@ -386,7 +386,7 @@ class Siesta(FileIOCalculator):
     @deprecated(
         "The keyword 'UNPOLARIZED' has been deprecated,"
         "and replaced by 'non-polarized'",
-        category=np.VisibleDeprecationWarning,
+        category=FutureWarning,
         callback=_nonpolarized_alias,
     )
     def set(self, **kwargs):
@@ -1289,7 +1289,7 @@ class Siesta3_2(Siesta):
         "If using the ASE interface with SIESTA 3.2 you must explicitly "
         "include the keywords 'SpinPolarized', 'NonCollinearSpin' and "
         "'SpinOrbit' if needed.",
-        np.VisibleDeprecationWarning
+        FutureWarning
     )
     def __init__(self, *args, **kwargs):
         """

@@ -987,7 +987,7 @@ class Atoms:
     @deprecated(
         "Please use len(self) or, if your atoms are distributed, "
         "self.get_global_number_of_atoms.",
-        category=np.VisibleDeprecationWarning,
+        category=FutureWarning,
     )
     def get_number_of_atoms(self):
         """
