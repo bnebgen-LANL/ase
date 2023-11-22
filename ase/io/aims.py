@@ -220,10 +220,14 @@ def get_aims_header():
 
 
 def _write_velocities_alias(args: List, kwargs: Dict[str, Any]) -> bool:
-    if len(args) > 6 and args[6]:
-        args[5] = True
+    arg_position = 5
+    if len(args) > arg_position and args[arg_position]:
+        args[arg_position - 1] = True
     elif kwargs.get("velocities", False):
-        kwargs["write_velocities"] = True
+        if len(args) < arg_position:
+            kwargs["write_velocities"] = True
+        else:
+            args[arg_position - 1] = True
     else:
         return False
     return True
