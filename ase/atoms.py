@@ -8,8 +8,6 @@ object.
 """
 import copy
 import numbers
-import warnings
-
 from math import cos, pi, sin
 
 import numpy as np

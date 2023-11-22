@@ -1,5 +1,4 @@
 """Defines class/functions to write input and parse output for FHI-aims."""
-import inspect
 import os
 import re
 import time

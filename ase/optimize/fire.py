@@ -9,27 +9,28 @@ from ase.utils import deprecated
 
 def _forbid_maxmove(args: List, kwargs: Dict[str, Any]) -> bool:
     """Set maxstep with maxmove if not set."""
-    if len(args) >= 8 and args[7] is not None:
-        value = args[7]
-        args[7] = None
+    maxstep_index = 6
+    maxmove_index = 7
 
-        if args[6] is None:
-            args[6] = value
-            return True
+    def _pop_arg(name: str) -> Any:
+        to_pop = None
+        if len(args) > maxmove_index:
+            to_pop = args[maxmove_index]
+            args[maxmove_index] = None
 
-    if kwargs.get("maxmove", None) is not None:
-        value = kwargs["maxmove"]
-        del kwargs["maxmove"]
+        elif name in kwargs:
+            to_pop = kwargs[name]
+            del kwargs[name]
+        return to_pop
 
-        if len(args) == 7 and args[6] is None:
-            args[6] = value
-            return True
+    if len(args) > maxstep_index and args[maxstep_index] is None:
+        value = args[maxstep_index] = _pop_arg("maxmove")
+    elif kwargs.get("maxstep", None) is None:
+        value = kwargs["maxstep"] = _pop_arg("maxmove")
+    else:
+        return False
 
-        if "maxstep" in kwargs and kwargs.get("maxstep", None) is None:
-            kwargs["maxstep"] = value
-            return True
-
-    return False
+    return value is not None
 
 
 class FIRE(Optimizer):

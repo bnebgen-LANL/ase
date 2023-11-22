@@ -17,7 +17,6 @@ import tempfile
 from typing import Any, Dict, List
 import warnings
 from os.path import isfile, islink, join
-from matplotlib.pyplot import get
 
 import numpy as np
 
@@ -187,14 +186,14 @@ class SiestaParameters(Parameters):
 
 
 _DEPRECATED_SIESTA_COMMAND_MESSAGE = (
-        'Please use ``$ASE_SIESTA_COMMAND`` and not '
-        '``$SIESTA_COMMAND``, which will be ignored '
-        'in the future. The new command format will not '
-        'work with the "<%s > %s" specification.  Use '
-        'instead e.g. "ASE_SIESTA_COMMAND=siesta'
-        ' < PREFIX.fdf > PREFIX.out", where PREFIX will '
-        'automatically be replaced by calculator label.'
-    )
+    'Please use ``$ASE_SIESTA_COMMAND`` and not '
+    '``$SIESTA_COMMAND``, which will be ignored '
+    'in the future. The new command format will not '
+    'work with the "<%s > %s" specification.  Use '
+    'instead e.g. "ASE_SIESTA_COMMAND=siesta'
+    ' < PREFIX.fdf > PREFIX.out", where PREFIX will '
+    'automatically be replaced by calculator label.'
+)
 
 
 def _nonpolarized_alias(_: List, kwargs: Dict[str, Any]) -> bool:
