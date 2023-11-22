@@ -391,7 +391,8 @@ class BaseNEB:
                          optimizer=MDMin, mic=False, steps=100):
         """
         .. deprecated:: 3.23.0
-            Please use ``NEB``'s ``interpolate(method='idpp')`` method
+            Please use :class:`~ase.mep.NEB`'s ``interpolate(method='idpp')``
+            method
         """
         idpp_interpolate(self, traj=traj, log=log, fmax=fmax,
                          optimizer=optimizer, mic=mic, steps=steps)
@@ -1234,7 +1235,7 @@ class NEBtools(NEBTools):
     def __init__(self, images):
         """
         .. deprecated:: 3.23.0
-            Please use ``NEBTools``.
+            Please use :class:`~ase.mep.NEBTools`.
         """
         NEBTools.__init__(self, images)
 
@@ -1243,6 +1244,6 @@ class NEBtools(NEBTools):
 def plot_band_from_fit(s, E, Sfit, Efit, lines, ax=None):
     """
     .. deprecated:: 3.23.0
-        Please use ``NEBTools.plot_band_from_fit``.
+        Please use :meth:`NEBTools.plot_band_from_fit`.
     """
     NEBTools.plot_band_from_fit(s, E, Sfit, Efit, lines, ax=None)

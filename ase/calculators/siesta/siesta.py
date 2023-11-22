@@ -1295,7 +1295,7 @@ class Siesta3_2(Siesta):
         """
         .. deprecated: 3.18.2
             The Siesta3_2 calculator class will no longer be supported.
-            Use :class:`ase.calculators.siesta.Siesta` instead.
+            Use :class:`~ase.calculators.siesta.Siesta` instead.
             If using the ASE interface with SIESTA 3.2 you must explicitly
             include the keywords 'SpinPolarized', 'NonCollinearSpin' and
             'SpinOrbit' if needed.

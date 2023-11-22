@@ -9,6 +9,6 @@ class AutoNEB(RealAutoNEB):
     def __init__(self, *args, **kwargs):
         """
         .. deprecated:: 3.23.0
-            Please import AutoNEB from ase.mep
+            Please import ``AutoNEB`` from :mod:`ase.mep`
         """
         super().__init__(*args, **kwargs)

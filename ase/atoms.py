@@ -287,7 +287,7 @@ class Atoms:
 
         .. deprecated:: 3.20.0
             Please use the equivalent ``atoms.calc`` instead of
-            atoms.get_calculator().
+            ``atoms.get_calculator()``.
         """
 
         return self.calc
@@ -992,8 +992,8 @@ class Atoms:
     def get_number_of_atoms(self):
         """
         .. deprecated:: 3.18.1
-            You probably want len(atoms).  Or if your atoms are distributed,
-            use (and see) get_global_number_of_atoms().
+            You probably want ``len(atoms)``.  Or if your atoms are distributed,
+            use (and see) :func:`get_global_number_of_atoms()`.
         """
         return len(self)
 

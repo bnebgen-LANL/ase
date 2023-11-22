@@ -17,6 +17,6 @@ class BaseSiesta(Siesta):
         """
         .. deprecated:: 3.18.2
             The BaseSiesta calculator class will no longer be supported.
-            Use :class:`ase.calculators.siesta.Siesta` instead.
+            Use :class:`~ase.calculators.siesta.Siesta` instead.
         """
         Siesta.__init__(self, *args, **kwargs)

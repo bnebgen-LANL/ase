@@ -787,8 +787,8 @@ class ExpCellFilter(UnitCellFilter):
             \nabla E(U) / \nabla U_ij =  [L(U, S exp(-U))]_ij
 
         .. deprecated:: 3.23.0
-            Use ``FrechetCellFilter`` for better convergence w.r.t. cell
-            variables.
+            Use :class:`~ase.filters.FrechetCellFilter` for better convergence
+            w.r.t. cell variables.
         """
         Filter.__init__(self, atoms=atoms, indices=range(len(atoms)))
         UnitCellFilter.__init__(self, atoms=atoms, mask=mask,

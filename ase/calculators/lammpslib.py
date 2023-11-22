@@ -53,7 +53,7 @@ def convert_cell(ase_cell):
 
     .. deprecated:: 3.23.0
         Please use
-        :func:`ase.calculators.lammps.coordinatetransform.calc_rotated_cell`.
+        :func:`~ase.calculators.lammps.coordinatetransform.calc_rotated_cell`.
     """
     cell = ase_cell.T
 

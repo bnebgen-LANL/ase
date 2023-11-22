@@ -1,4 +1,4 @@
-"""Temporary file while we deprecate this locaation."""
+"""Temporary file while we deprecate this location."""
 
 from ase.mep import NEB as RealNEB
 from ase.mep import NEBTools as RealNEBTools
@@ -12,7 +12,7 @@ class NEB(RealNEB):
     def __init__(self, *args, **kwargs):
         """
         .. deprecated:: 3.23.0
-            Please import ``NEB`` from :mod:`ase.mep`
+            Please import :class:`~ase.mep.neb.NEB` from :mod:`ase.mep`
         """
         super().__init__(*args, **kwargs)
 
@@ -22,7 +22,7 @@ class NEBTools(RealNEBTools):
     def __init__(self, *args, **kwargs):
         """
         .. deprecated:: 3.23.0
-            Please import ``NEBTools`` from :mod:`ase.mep`
+            Please import :class:`~ase.mep.neb.NEBTools`` from :mod:`ase.mep`
         """
         super().__init__(*args, **kwargs)
 
@@ -31,7 +31,7 @@ class NEBTools(RealNEBTools):
 def interpolate(*args, **kwargs):
     """
     .. deprecated:: 3.23.0
-            Please import ``interpolate`` from :mod:`ase.mep`
+            Please import :func:`~ase.mep.neb.interpolate` from :mod:`ase.mep`
     """
     return realinterpolate(*args, **kwargs)
 
@@ -40,6 +40,7 @@ def interpolate(*args, **kwargs):
 def idpp_interpolate(*args, **kwargs):
     """
     .. deprecated:: 3.23.0
-            Please import ``idpp_interpolate`` from :mod:`ase.mep`
+            Please import :func:`~ase.mep.neb.idpp_interpolate` from
+            :mod:`ase.mep`
     """
     return realidpp_interpolate(*args, **kwargs)
