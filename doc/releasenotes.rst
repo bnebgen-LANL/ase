@@ -50,7 +50,7 @@ Git master branch
   configuration. This entry point only accepts objects of the type
   :class:`~ase.utils.plugins.ExternalIOFormat`.
 
-* :class:`ase.phonons.Displacement` now has a `comm` keyword argument to
+* :class:`ase.phonons.Displacement` now has a ``comm`` keyword argument to
   better support parallelization.
 
 * Fix :func:`ase.build.rotate.minimize_rotation_and_translation` for
@@ -150,7 +150,7 @@ Calculators:
   :func:`ase.calculators.lammps.coordinatetransform.calc_rotated_cell` instead.
   (:mr:`3102`)
 
-* Fix `lsubsrot` typo in VASP calculator to `lsubrot` (:mr:`2762`)
+* Fix ``lsubsrot`` typo in VASP calculator to ``lsubrot`` (:mr:`2762`)
 
 * Fix atomic polarizability for boron in
   :class:`ase.calculators.bond_polarizability.LippincottStuttman` (:mr:`2759`)
@@ -619,7 +619,7 @@ Calculators:
   :class:`ase.calculators.socketio.SocketIOCalculator`.
 
 * :class:`~ase.calculators.vasp.Vasp` now uses the newer implementation
-  formerly known as Vasp2. Vasp2 is deprecated.
+  formerly known as ``Vasp2``. ``Vasp2`` is deprecated.
 
 * Added smooth cutoff option to :class:`ase.calculators.lj.LennardJones`.
   This makes the forces continuous as atoms move past the cutoff radius.
@@ -1022,7 +1022,7 @@ Version 3.18.1
   Also, the :class:`~ase.cell.Cell` object now exposes almost the entire
   ``ndarray`` interface.  For a list of smaller bugfixes, see the git log.
 
-* Deprecate ``ase.Atoms.get_number_of_atoms`` (:mr:`1295`)
+* Deprecated ``ase.Atoms.get_number_of_atoms`` (:mr:`1295`)
 
 
 Version 3.18.0
