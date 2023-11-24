@@ -12,7 +12,7 @@ class BaseSiesta(Siesta):
     def __init__(self, *args, **kwargs):
         """
         .. deprecated:: 3.18.2
-            The BaseSiesta calculator class will no longer be supported.
+            The ``BaseSiesta`` calculator class will no longer be supported.
             Use :class:`~ase.calculators.siesta.Siesta` instead.
         """
         Siesta.__init__(self, *args, **kwargs)
