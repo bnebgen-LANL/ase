@@ -784,11 +784,10 @@ class NewPrimitiveNeighborList:
     >>> indices, offsets = nl.get_neighbors(0)
     """
 
-    def __init__(self, cutoffs, skin=0.3, skin_split=1.0, sorted=False, self_interaction=True,
+    def __init__(self, cutoffs, skin=0.3, sorted=False, self_interaction=True,
                  bothways=False, use_scaled_positions=False):
         self.cutoffs = np.asarray(cutoffs) + skin
         self.skin = skin
-        self.skin_split=skin_split
         self.sorted = sorted
         self.self_interaction = self_interaction
         self.bothways = bothways
@@ -805,9 +804,8 @@ class NewPrimitiveNeighborList:
             return True
 
         if ((self.pbc != pbc).any() or 
-                (cell.orthorhombic and ((self.cell - cell)**2).sum() > (self.skin * (1.0-self.skin_split))**2) or
                 (not(cell.orthorhombic) and (self.cell != cell).any()) or
-                ((self.positions - positions)**2).sum(1).max() > (self.skin * self.skin_split)**2):
+                ((self.positions - positions)**2).sum(1).max() > (self.skin**2 - (np.diag(curCell-at1.cell).clip(min=0)**2).sum())):
             self.build(pbc, cell, positions, numbers=numbers)
             return True
 
@@ -924,11 +922,9 @@ class PrimitiveNeighborList:
             self.build(pbc, cell, coordinates)
             return True
 
-        if ((self.pbc != pbc).any() or 
-                (cell.orthorhombic and ((self.cell - cell)**2).sum() > (self.skin * (1.0-self.skin_split))**2) or 
-                (not(cell.orthorhombic) and (self.cell != cell).any()) or 
-                ((self.coordinates
-                 - coordinates)**2).sum(1).max() > (self.skin * self.skin_split)**2):
+       if ((self.pbc != pbc).any() or 
+                (not(cell.orthorhombic) and (self.cell != cell).any()) or
+                ((self.positions - positions)**2).sum(1).max() > (self.skin**2 - (np.diag(curCell-at1.cell).clip(min=0)**2).sum())):
             self.build(pbc, cell, coordinates)
             return True
 
