@@ -922,9 +922,9 @@ class PrimitiveNeighborList:
             self.build(pbc, cell, coordinates)
             return True
 
-       if ((self.pbc != pbc).any() or 
+        if ((self.pbc != pbc).any() or 
                 (not(cell.orthorhombic) and (self.cell != cell).any()) or
-                ((self.positions - positions)**2).sum(1).max() > (self.skin**2 - (np.diag(curCell-at1.cell).clip(min=0)**2).sum())):
+                ((self.positions - positions)**2).sum(1).max() > (self.skin**2 - (np.diag(curCell-at1.cell).clip(min=0)**2).sum())): 
             self.build(pbc, cell, coordinates)
             return True
 
