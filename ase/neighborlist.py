@@ -805,7 +805,7 @@ class NewPrimitiveNeighborList:
 
         if ((self.pbc != pbc).any() or 
                 (not(cell.orthorhombic) and (self.cell != cell).any()) or
-                ((self.positions - positions)**2).sum(1).max() > (self.skin**2 - (np.diag(cell-at1.cell).clip(min=0)**2).sum())):
+                ((self.positions - positions)**2).sum(1).max() > (self.skin**2 - (np.diag(cell-self.cell).clip(min=0)**2).sum())):
             self.build(pbc, cell, positions, numbers=numbers)
             return True
 
@@ -924,7 +924,7 @@ class PrimitiveNeighborList:
 
         if ((self.pbc != pbc).any() or 
                 (not(cell.orthorhombic) and (self.cell != cell).any()) or
-                ((self.positions - positions)**2).sum(1).max() > (self.skin**2 - (np.diag(cell-at1.cell).clip(min=0)**2).sum())): 
+                ((self.positions - positions)**2).sum(1).max() > (self.skin**2 - (np.diag(cell-self.cell).clip(min=0)**2).sum())): 
             self.build(pbc, cell, coordinates)
             return True
 
